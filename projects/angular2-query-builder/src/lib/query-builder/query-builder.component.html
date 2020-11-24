@@ -101,6 +101,17 @@
                   <option *ngFor="let field of getFields(rule.entity)" [ngValue]="field.value">
                     {{field.name}}
                   </option>
+                  <select [ngClass]="getClassNames('fieldControl')" [(ngModel)]="rule.function">
+                    <option value=''>-</option>
+                    <option>len</option>
+                    <option>substring</option>
+                    <option>isnull</option>
+                    <option>round</option>
+                    <option>upper</option>
+                    <option>lower</option>
+                    <option>replace</option>
+                  </select>
+                  <input *ngIf="rule.function=='round'" [(ngModel)]="rule.length" placeholder="length (num)" [ngClass]="getClassNames('inputControl')"/>  
                 </select>
               </div>
             </ng-template>
@@ -142,73 +153,6 @@
                 </select>
                 <ng-container *ngSwitchCase="'multiselect'">
                   <select [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.value" (ngModelChange)="changeInput()"
-                    [disabled]="disabled" multiple>
-                    <option *ngFor="let opt of getOptions(rule.field)" [ngValue]="opt.value">
-                      {{opt.name}}
-                    </option>
-                  </select>
-                </ng-container>
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.value" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'boolean'" type="checkbox">
-              </div>
-            </ng-template>
-
-
-            <ng-container *ngIf="findComponentForRule(rule) as template; else defaultComponent">
-              <ng-container *ngTemplateOutlet="template; context: getInputContext(rule)"></ng-container>
-            </ng-container>
-
-            <ng-template #defaultComponent>
-              <div [ngClass]="getClassNames('inputControlSize')" [ngSwitch]="getInputType(rule.field, rule.operator)">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'string'" type="text">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'number'" type="number">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'date'" type="date">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'time'" type="time">
-                <select [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'category'">
-                  <option *ngFor="let opt of getOptions(rule.field)" [ngValue]="opt.value">
-                    {{opt.name}}
-                  </option>
-                </select>
-                <ng-container *ngSwitchCase="'multiselect'">
-                  <select [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.component" (ngModelChange)="changeInput()"
-                    [disabled]="disabled" multiple>
-                    <option *ngFor="let opt of getOptions(rule.field)" [ngValue]="opt.value">
-                      {{opt.name}}
-                    </option>
-                  </select>
-                </ng-container>
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.value" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'boolean'" type="checkbox">
-              </div>
-            </ng-template>
-
-            <ng-container *ngIf="findExpressionForRule(rule) as template; else defaultExpression">
-              <ng-container *ngTemplateOutlet="template; context: getInputContext(rule)"></ng-container>
-            </ng-container>
-
-            <ng-template #defaultExpression>
-              <div [ngClass]="getClassNames('inputControlSize')" [ngSwitch]="getInputType(rule.field, rule.operator)">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'string'" type="text">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'number'" type="number">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'date'" type="date">
-                <input [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'time'" type="time">
-                <select [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
-                  [disabled]="disabled" *ngSwitchCase="'category'">
-                  <option *ngFor="let opt of getOptions(rule.field)" [ngValue]="opt.value">
-                    {{opt.name}}
-                  </option>
-                </select>
-                <ng-container *ngSwitchCase="'multiselect'">
-                  <select [ngClass]="getClassNames('inputControl')" [(ngModel)]="rule.expression" (ngModelChange)="changeInput()"
                     [disabled]="disabled" multiple>
                     <option *ngFor="let opt of getOptions(rule.field)" [ngValue]="opt.value">
                       {{opt.name}}
