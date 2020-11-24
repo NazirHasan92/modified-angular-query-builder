@@ -269,6 +269,36 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
     }
   }
 
+  findExpressionForRule(rule: Rule): TemplateRef<any> {
+    const type = this.getInputType(rule.field, rule.operator);
+    if (type) {
+      const queryExpression = this.findQueryInput(type);
+      if (queryExpression) {
+        return queryExpression.template;
+      } else {
+        if (this.defaultTemplateTypes.indexOf(type) === -1) {
+          console.warn(`Could not find template for field with type: ${type}`);
+        }
+        return null;
+      }
+    }
+  }
+
+  findComponentForRule(rule: Rule): TemplateRef<any> {
+    const type = this.getInputType(rule.field, rule.operator);
+    if (type) {
+      const queryComponent = this.findQueryInput(type);
+      if (queryComponent) {
+        return queryComponent.template;
+      } else {
+        if (this.defaultTemplateTypes.indexOf(type) === -1) {
+          console.warn(`Could not find template for field with type: ${type}`);
+        }
+        return null;
+      }
+    }
+  }
+
   findQueryInput(type: string): QueryInputDirective {
     const templates = this.parentInputTemplates || this.inputTemplates;
     return templates.find((item) => item.queryInputType === type);
